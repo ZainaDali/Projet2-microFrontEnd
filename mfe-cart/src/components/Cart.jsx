@@ -14,11 +14,11 @@ function Cart() {
     return () => unsubscribe();
   }, []);
 
-  // ✅ EMETTRE cart:updated
   useEffect(() => {
     eventBus.emit('cart:updated', {
       items,
       total,
+      count: items.length,  
     });
   }, [items]);
 

@@ -26,7 +26,10 @@ function Recommendations() {
   }, []);
 
   const handleAddReco = (product) => {
-    eventBus.emit('cart:add', product);
+    eventBus.emit('product:added', {
+    ...product,
+    cartId: `${Date.now()}-${Math.random()}`,
+  });
   };
 
   return (

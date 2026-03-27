@@ -6,6 +6,23 @@ const ProductGrid     = lazy(() => import('mfeProduct/ProductGrid'));
 const Cart            = lazy(() => import('mfeCart/Cart'));
 const Recommendations = lazy(() => import('mfeReco/Recommendations'));
 
+// Ajout Error Boundary
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div className="loading-fallback">{this.props.fallback}</div>;
+    }
+    return this.props.children;
+  }
+}
+
 function LoadingFallback({ name }) {
   return <div className="loading-fallback">Chargement {name}...</div>;
 }
@@ -17,7 +34,7 @@ function App() {
     const unsub = eventBus.on('cart:updated', ({ count }) => {
       setCartCount(count);
     });
-    return unsub; // cleanup
+    return unsub;
   }, []);
 
   return (
@@ -28,20 +45,26 @@ function App() {
       </header>
       <main className="shell-main">
         <section className="product-area">
-          <Suspense fallback={<LoadingFallback name="Products" />}>
-            <ProductGrid />
-          </Suspense>
+          <ErrorBoundary fallback="Catalogue indisponible">
+            <Suspense fallback={<LoadingFallback name="Products" />}>
+              <ProductGrid />
+            </Suspense>
+          </ErrorBoundary>
         </section>
         <aside className="cart-area">
-          <Suspense fallback={<LoadingFallback name="Cart" />}>
-            <Cart />
-          </Suspense>
+          <ErrorBoundary fallback="Panier indisponible">
+            <Suspense fallback={<LoadingFallback name="Cart" />}>
+              <Cart />
+            </Suspense>
+          </ErrorBoundary>
         </aside>
       </main>
       <section className="reco-area">
-        <Suspense fallback={<LoadingFallback name="Recommendations" />}>
-          <Recommendations />
-        </Suspense>
+        <ErrorBoundary fallback="Recommandations indisponibles">
+          <Suspense fallback={<LoadingFallback name="Recommendations" />}>
+            <Recommendations />
+          </Suspense>
+        </ErrorBoundary>
       </section>
     </div>
   );
