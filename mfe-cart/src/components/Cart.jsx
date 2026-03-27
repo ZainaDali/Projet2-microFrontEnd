@@ -7,17 +7,10 @@ function Cart() {
 
   const total = items.reduce((sum, item) => sum + item.price, 0);
 
-  // ✅ ECOUTER cart:add
   useEffect(() => {
-    const unsubscribe = eventBus.on('cart:add', (product) => {
-      const newItem = {
-        ...product,
-        cartId: Date.now(), // identifiant unique pour le panier
-      };
-
-      setItems(prev => [...prev, newItem]);
+    const unsubscribe = eventBus.on('product:added', (product) => {
+      setItems(prev => [...prev, product]); // cartId déjà dans product
     });
-
     return () => unsubscribe();
   }, []);
 
