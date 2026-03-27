@@ -36,7 +36,7 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-  name: 'reco',
+  name: 'mfeReco',
 
   filename: 'remoteEntry.js',
 

@@ -40,7 +40,7 @@ module.exports = {
 
   plugins: [
     new ModuleFederationPlugin({
-      name: 'cart',
+      name: 'mfeCart',
 
       filename: 'remoteEntry.js',
 
